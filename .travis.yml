@@ -1,0 +1,20 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t anmol4developers/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run anmol4developers/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t anmol4developers/multi-client ./client
+  - docker build -t anmol4developers/multi-nginx ./nginx
+  - docker build -t anmol4developers/multi-server ./server
+  - docker build -t anmol4developers/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push anmol4developers/multi-client
+  - docker push anmol4developers/multi-nginxt
+  - docker push anmol4developers/multi-server 
+  - docker push anmol4developers/multi-worker 
