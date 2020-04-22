@@ -1,0 +1,10 @@
+
+sudo: required
+services:
+  - docker
+
+
+
+script:
+
+  - docker build -t anmol4developers/multi-client ./client
